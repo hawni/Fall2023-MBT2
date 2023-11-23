@@ -1,0 +1,300 @@
+#include <iostream>
+// #include <algorithm>
+#include <vector>
+#include <iterator>
+using namespace std;
+
+
+vector <int> x={9, 3, 20, 2, 1};
+const int n = x.size();
+
+class sort
+{
+    public:
+    void bubble_sort();
+    void insertion_sort();
+    void selection_sort();
+    void merge( vector<int>& x, int left, int mid, int right);
+    void merge_sort(vector<int>& x , int left, int right);
+    int partition(int low, int high);
+    void quick_sort(int low,int high);
+    void heap_sort();
+    void heap(int n, int i);
+    void surt();
+    void printArray();
+    int binarySearch(vector<int>& arr);
+};
+
+void sort::bubble_sort()
+{
+    for (int i=0; i<x.size(); i++)
+        for (int j=0; j<x.size()-i-1; j++)
+            {
+                if (x[j] > x[j+1])
+                   {
+                        swap(x[j], x[j+1]);
+                   }
+            }
+    for (int k=0; k<x.size(); k++)
+        cout << x[k] << endl;
+
+}
+/////////////////////////
+
+void sort::insertion_sort()
+{
+    int i, j, key;
+    for (i=0; i<x.size(); i++)
+    {
+        key = x[i];
+        j = i-1;
+        while(x[j] > key)
+        {
+            swap(x[j], x[j+1]);
+            j = j-1;
+        }
+    }
+    for(int k=0; k<x.size(); k++)
+        cout << x[k] << endl;
+
+}
+//////////////////
+
+void sort::selection_sort()
+{
+    int min;
+    for (int i=0; i<x.size(); i++)
+    {
+        min = i;
+        for (int j=i+1; j<x.size(); j++)
+            if (x[j] < x[min])
+                min = j;
+            if (min != i)
+                swap(x[min], x[i]);
+    }
+    for(int k=0; k<x.size(); k++)
+        cout << x[k] << endl;
+}
+/////////////////////
+
+void sort::merge( vector<int>& x, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    vector<int> L(n1), R(n2);
+
+    for (int i = 0; i < n1; i++)
+        L[i] = x[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = x[mid + 1 + j];
+
+    int i = 0, j = 0, k = left;
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            x[k] = L[i];
+            i++;
+        } else {
+            x[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        x[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        x[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void sort::merge_sort(vector<int>& x , int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        merge_sort(x, left, mid);
+        merge_sort(x, mid + 1, right);
+
+        merge(x,left, mid, right);
+    }
+
+    cout << "Sorted array: ";
+    for (int num : x) {
+        cout << num << " ";
+    }
+    cout << endl;
+
+}
+
+// ///////////
+
+int sort::partition(int low, int high) {
+    
+  int pivot = x[high];
+  
+  int i = (low - 1);
+
+  for (int j = low; j < high; j++) {
+    if (x[j] <= pivot) {
+        
+      i++;
+      
+      swap(x[i], x[j]);
+     int i;
+    for (i = 0; i < high + 1; i++)
+      cout << x[i] << " ";
+    cout << endl;
+     }
+  }
+  
+  swap(x[i + 1], x[high]);
+  
+  return (i + 1);
+}
+
+
+void sort::quick_sort(int low,int high)
+{
+  if (low < high) {
+      
+    int pi = partition(low, high);
+
+    quick_sort(low, pi - 1);
+
+    quick_sort(pi + 1, high);
+  }
+    printArray();
+}
+
+void sort::heap(int n, int i) 
+{ 
+    int big = i;
+    int l = 2*i + 1;
+    int r = 2*i + 2;
+
+    if (l < n && x[l] > x[big]) 
+        big = l; 
+  
+
+    if (r < n && x[r] > x[big]) 
+        big = r; 
+  
+    if (big != i) 
+    { 
+        swap(x[i], x[big]); 
+  
+
+        heap(n, big); 
+    } 
+} 
+  
+
+
+void sort::surt()
+{ 
+    int n = x.size(); 
+    for (int i = n / 2 - 1; i >= 0; i--) 
+        heap(n, i); 
+  
+
+    for (int i=n-1; i>=0; i--) 
+    { 
+
+        swap(x[0], x[i]); 
+  
+        heap(i, 0); 
+    } 
+    for (int i=0; i<n; ++i) 
+        cout << x[i] << " "; 
+    cout << "\n"; 
+
+} 
+
+
+void  sort::heap_sort()
+{
+    surt();
+}
+
+
+void sort::printArray() {
+  int i;
+  for (i = 0; i < x.size(); i++)
+    cout << x[i] << " ";
+  cout << endl;
+}
+// ///////////
+
+
+
+int sort::binarySearch(vector<int>& x) {
+    printArray();
+    cout << "enter your number:" << endl;
+    int target;
+    cin >> target;
+    int left = 0;
+    int right = x.size() - 1;
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+
+        if (x[mid] == target) {
+            return mid;
+        } else if (x[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+
+    return -1;
+}
+
+
+int main()
+{
+class sort s;
+// s.bubble_sort();
+// s.insertion_sort();
+// s.selection_sort();
+// s.merge_sort(x, 0, x.size() - 1);
+// s.quick_sort(0, n-1);
+// s.heap_sort();
+
+// s.printArray();
+ 
+    // int index = s.binarySearch(x);
+
+    // if (index != -1) {
+    //     cout << "Element found at index " << index << endl;
+    // } else {
+    //     cout << "Element not found" << endl;
+    // }
+
+
+
+
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
